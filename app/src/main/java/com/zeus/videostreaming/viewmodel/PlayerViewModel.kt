@@ -45,11 +45,19 @@ class PlayerViewModel : ViewModel() {
         _state.value = _state.value.copy(shouldEnterPipMode = true)
     }
 
-    fun play() {
+    fun playPause() {
+        if (state.value.isPlaying) {
+            pause()
+        } else {
+            play()
+        }
+    }
+
+    private fun play() {
         _state.value.player?.play()
     }
 
-    fun pause() {
+    private fun pause() {
         _state.value.player?.pause()
     }
 
@@ -64,6 +72,12 @@ class PlayerViewModel : ViewModel() {
     fun setFullScreenState(isOnFullScreen: Boolean) {
         _state.value = _state.value.copy(
             isOnFullScreen = isOnFullScreen
+        )
+    }
+
+    fun setPipMode(isOnPipMode: Boolean) {
+        _state.value = _state.value.copy(
+            isOnPipMode = isOnPipMode
         )
     }
 }

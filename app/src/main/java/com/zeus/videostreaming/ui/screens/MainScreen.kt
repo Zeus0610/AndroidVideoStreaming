@@ -1,6 +1,9 @@
 package com.zeus.videostreaming.ui.screens
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -38,13 +41,26 @@ fun MainScreen(
     val context = LocalContext.current
 
     PlayerLifeCycle(
-        initialize = { viewModel.initializePlayer("https://192.168.1.64/video/index.mpd", context) },
+        initialize = {
+            viewModel.initializePlayer(
+                "https://192.168.1.64/video/index.mpd",
+                context
+            )
+        },
         release = viewModel::releasePlayer
     )
 
     if (inPipMode || state.value.isOnFullScreen) {
         StreamingVideoPlayer(
-            player = state.value.player
+            modifier = Modifier
+                .fillMaxSize(0.9f),
+            player = state.value.player,
+            isPlaying = state.value.isPlaying,
+            isOnPipMode = state.value.isOnPipMode,
+            onPipClick = onPipClick,
+            onFullScreenClick = onFullScreen,
+            onTimeChange = { /*todo*/ },
+            onPlayPause = viewModel::playPause
         )
     } else {
         Scaffold(
@@ -61,23 +77,17 @@ fun MainScreen(
             ) {
                 Column {
                     StreamingVideoPlayer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(16 / 9f),
                         player = state.value.player,
                         isPlaying = state.value.isPlaying,
-                        onPlayPause = {
-                            if (state.value.isPlaying) {
-                                viewModel.pause()
-                            } else {
-                                viewModel.play()
-                            }
-                        }
+                        isOnPipMode = state.value.isOnPipMode,
+                        onPlayPause = viewModel::playPause,
+                        onTimeChange = { /*todo*/ },
+                        onPipClick = onPipClick,
+                        onFullScreenClick = onFullScreen
                     )
-                    Button(onClick = onPipClick) {
-                        Text(text = "Pip")
-                    }
-                    Button(
-                        onClick = onFullScreen ) {
-                        Text(text = "Full Screen")
-                    }
                 }
             }
         }

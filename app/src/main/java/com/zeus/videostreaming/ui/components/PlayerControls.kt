@@ -1,21 +1,18 @@
 package com.zeus.videostreaming.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Slider
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -27,30 +24,37 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.zeus.videostreaming.R
 import kotlinx.coroutines.delay
 
-@Preview(widthDp = 160, heightDp = 90)
+@Preview(widthDp = 320, heightDp = 180)
 @Composable
 fun PlayerControls(
+    modifier: Modifier = Modifier,
     isPlaying: Boolean = false,
     videoTime: Float = 0f,
+    isOnPipMode: Boolean = false,
     onPlayPause: () -> Unit = {},
     onTimeChange: (Float) -> Unit = {},
+    onPipClick: () -> Unit = {},
+    onFullScreenClick: () -> Unit = {},
     playerView: @Composable () -> Unit = {}
 ) {
     var visibility by remember {
-        mutableStateOf(true)
+        mutableStateOf(isOnPipMode.not())
     }
 
-    LaunchedEffect(key1 = isPlaying) {
+    LaunchedEffect(key1 = isPlaying, visibility) {
         if (isPlaying) {
             delay(3000)
-            visibility = visibility.not()
+            visibility = false
         }
     }
 
     Box(
-        modifier = Modifier.clickable { visibility = visibility.not() },
+        modifier = modifier
+            .fillMaxSize()
+            .clickable { visibility = visibility.not() },
         contentAlignment = Alignment.Center
     ) {
         playerView.invoke()
@@ -104,9 +108,36 @@ fun PlayerControls(
                 }
 
                 Slider(
+                    modifier = Modifier.fillMaxWidth(0.8f),
                     value = videoTime,
-                    onValueChange = onTimeChange
+                    onValueChange = onTimeChange,
                 )
+
+                IconButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = onPipClick
+                ) {
+                    Icon(
+                        painter = painterResource(
+                            id = R.drawable.ic_pip
+                        ),
+                        contentDescription = "pip",
+                        tint = Color.White
+                    )
+                }
+
+                IconButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = onFullScreenClick
+                ) {
+                    Icon(
+                        painter = painterResource(
+                            id = R.drawable.ic_fullscreen
+                        ),
+                        contentDescription = "pip",
+                        tint = Color.White
+                    )
+                }
             }
         }
     }

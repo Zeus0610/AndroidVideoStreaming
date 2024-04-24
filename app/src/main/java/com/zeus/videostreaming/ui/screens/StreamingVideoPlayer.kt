@@ -28,10 +28,14 @@ import com.zeus.videostreaming.utils.findActivity
 @OptIn(UnstableApi::class)
 @Composable
 fun StreamingVideoPlayer(
+    modifier: Modifier  = Modifier,
     player: Player? = null,
     isPlaying: Boolean = false,
+    isOnPipMode: Boolean = false,
     onPlayPause: () -> Unit = {},
-    onTimeChange: (Float) -> Unit = {}
+    onTimeChange: (Float) -> Unit = {},
+    onPipClick: () -> Unit = {},
+    onFullScreenClick: () -> Unit = {}
 ) {
     KeepScreenOn()
     val context = LocalContext.current
@@ -47,15 +51,18 @@ fun StreamingVideoPlayer(
     }
 
     PlayerControls(
+        modifier = modifier,
         isPlaying = isPlaying,
         videoTime = 0.5f,
+        isOnPipMode = isOnPipMode,
         onPlayPause = onPlayPause,
-        onTimeChange = onTimeChange
+        onTimeChange = onTimeChange,
+        onPipClick = onPipClick,
+        onFullScreenClick = onFullScreenClick
     ) {
         AndroidView(
             modifier = pipModifier
                 .fillMaxWidth()
-                .aspectRatio(16 / 9f)
                 .focusable(),
             factory = { PlayerView(it) },
             update = { playerView ->
@@ -73,16 +80,6 @@ fun KeepScreenOn() {
     DisposableEffect(Unit) {
         val window = context.findActivity().window
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        } else {
-            window.insetsController?.apply {
-                hide(WindowInsets.Type.statusBars())
-                systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            }
-        }
 
         onDispose {
             window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)

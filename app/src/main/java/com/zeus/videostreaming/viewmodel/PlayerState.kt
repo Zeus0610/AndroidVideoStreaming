@@ -6,5 +6,6 @@ data class PlayerState(
     val player: Player? = null,
     val isPlaying: Boolean = false,
     val isOnFullScreen: Boolean = false,
-    val shouldEnterPipMode: Boolean = false
+    val shouldEnterPipMode: Boolean = false,
+    val isOnPipMode: Boolean = false
 )
