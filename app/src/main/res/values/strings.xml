@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_id">com.zeus.videostreaming</string>
     <string name="app_name">VideoStreaming</string>
     <string name="play">play</string>
     <string name="pause">pause</string>

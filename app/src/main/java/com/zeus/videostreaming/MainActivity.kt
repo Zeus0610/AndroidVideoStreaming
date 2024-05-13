@@ -15,10 +15,10 @@ import android.util.Rational
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.DrawableRes
+import androidx.annotation.OptIn
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +27,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
+import androidx.fragment.app.FragmentActivity
+import androidx.media3.common.util.UnstableApi
 import com.zeus.videostreaming.ui.screens.MainScreen
 import com.zeus.videostreaming.ui.theme.VideoStreamingTheme
 import com.zeus.videostreaming.utils.ACTION_PLAYER_CONTROLS
@@ -36,10 +38,11 @@ import com.zeus.videostreaming.utils.REQUEST_PAUSE
 import com.zeus.videostreaming.utils.REQUEST_PLAY
 import com.zeus.videostreaming.viewmodel.PlayerViewModel
 
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
 
     private val playerViewmodel by viewModels<PlayerViewModel>()
 
+    //Pip Receiver
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (intent == null || intent.action != ACTION_PLAYER_CONTROLS) {
@@ -54,6 +57,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

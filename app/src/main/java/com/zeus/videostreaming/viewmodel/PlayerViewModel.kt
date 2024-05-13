@@ -1,19 +1,14 @@
 package com.zeus.videostreaming.viewmodel
 
 import android.content.Context
-import android.media.MediaSession2
-import android.media.session.MediaSession
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.annotation.OptIn
 import androidx.lifecycle.ViewModel
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 class PlayerViewModel : ViewModel() {
 
@@ -26,7 +21,7 @@ class PlayerViewModel : ViewModel() {
         }
     }
 
-
+    @OptIn(UnstableApi::class)
     fun initializePlayer(uri: String, context: Context) {
         val player = ExoPlayer.Builder(context.applicationContext)
             .build()

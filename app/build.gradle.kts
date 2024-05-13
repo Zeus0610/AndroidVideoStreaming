@@ -18,6 +18,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildFeatures.buildConfig = true
     }
 
     buildTypes {
@@ -27,6 +28,33 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "BASE_URL", "\"https://192.168.1.64/video/index.mpd\"")
+        }
+
+        debug {
+            buildConfigField("String", "BASE_URL", "\"https://192.168.1.64/video/index.mpd\"")
+        }
+
+        register("fisicalDevice") {
+            isDebuggable = true
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            buildConfigField("String", "BASE_URL", "\"https://192.168.1.64/video/index.mpd\"")
+            signingConfig = signingConfigs.getByName("debug")
+        }
+
+        register("emulator") {
+            isDebuggable = true
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            buildConfigField("String", "BASE_URL", "\"https://10.0.2.2/video/index.mpd\"")
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -65,6 +93,11 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.exoplayer.dash)
     implementation(libs.androidx.media3.ui)
+    //implementation(libs.google.exoplayer.extension)
+    //implementation(libs.androidx.media3.cast)
+
+    implementation(libs.androidx.mediarouter)
+    implementation(libs.google.cast.framework)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

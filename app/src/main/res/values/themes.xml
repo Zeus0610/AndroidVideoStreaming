@@ -2,4 +2,5 @@
 <resources>
 
     <style name="Theme.VideoStreaming" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.mMediaRouter" parent="Theme.AppCompat.NoActionBar"/>
 </resources>
